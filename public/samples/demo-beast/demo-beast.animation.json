@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "spriteSheet": {
+    "image": "demo-beast.png",
+    "rows": 4,
+    "columns": 8,
+    "frameWidth": 32,
+    "frameHeight": 32,
+    "margin": { "x": 0, "y": 0 },
+    "spacing": { "x": 0, "y": 0 },
+    "transparency": {
+      "mode": "nativeAlpha",
+      "color": "#000000",
+      "tolerance": 0
+    }
+  },
+  "animations": {
+    "walk_down": {
+      "row": 0,
+      "frames": [0,1,2,3,4,5,6,7],
+      "fps": 8,
+      "frameDurations": {},
+      "playback": { "speed": 1, "loopMode": "loop", "loopCount": -1, "randomStart": false },
+      "transform": { "anchor": { "x": 0.5, "y": 0.9 }, "offset": { "x": 0, "y": 0 }, "scale": { "x": 3, "y": 3 }, "flipX": false, "flipY": false },
+      "frameOffsets": {},
+      "events": [{ "frame": 1, "name": "footstep" }, { "frame": 5, "name": "footstep" }],
+      "collision": { "defaultBodyBox": { "x": 9, "y": 11, "width": 14, "height": 18 }, "frames": {} }
+    },
+    "walk_left": {
+      "row": 1,
+      "frames": [0,1,2,3,4,5,6,7],
+      "fps": 8,
+      "frameDurations": {},
+      "playback": { "speed": 1, "loopMode": "loop", "loopCount": -1, "randomStart": false },
+      "transform": { "anchor": { "x": 0.5, "y": 0.9 }, "offset": { "x": 0, "y": 0 }, "scale": { "x": 3, "y": 3 }, "flipX": false, "flipY": false },
+      "frameOffsets": {},
+      "events": [],
+      "collision": { "defaultBodyBox": { "x": 9, "y": 11, "width": 14, "height": 18 }, "frames": {} }
+    },
+    "walk_right": {
+      "row": 2,
+      "frames": [0,1,2,3,4,5,6,7],
+      "fps": 8,
+      "frameDurations": {},
+      "playback": { "speed": 1, "loopMode": "loop", "loopCount": -1, "randomStart": false },
+      "transform": { "anchor": { "x": 0.5, "y": 0.9 }, "offset": { "x": 0, "y": 0 }, "scale": { "x": 3, "y": 3 }, "flipX": false, "flipY": false },
+      "frameOffsets": {},
+      "events": [],
+      "collision": { "defaultBodyBox": { "x": 9, "y": 11, "width": 14, "height": 18 }, "frames": {} }
+    },
+    "walk_up": {
+      "row": 3,
+      "frames": [0,1,2,3,4,5,6,7],
+      "fps": 8,
+      "frameDurations": {},
+      "playback": { "speed": 1, "loopMode": "loop", "loopCount": -1, "randomStart": false },
+      "transform": { "anchor": { "x": 0.5, "y": 0.9 }, "offset": { "x": 0, "y": 0 }, "scale": { "x": 3, "y": 3 }, "flipX": false, "flipY": false },
+      "frameOffsets": {},
+      "events": [],
+      "collision": { "defaultBodyBox": { "x": 9, "y": 11, "width": 14, "height": 18 }, "frames": {} }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "viewport": {
+    "width": 1280,
+    "height": 720,
+    "backgroundColor": "#17212b",
+    "groundY": 610
+  },
+  "bundles": {
+    "demo-beast": {
+      "image": "demo-beast.png",
+      "metadata": "demo-beast.animation.json"
+    }
+  },
+  "instances": [
+    {
+      "id": "demo-beast-left",
+      "name": "Demo Beast Left",
+      "bundleId": "demo-beast",
+      "clip": "walk_right",
+      "transform": { "x": 330, "y": 610, "scaleX": 1, "scaleY": 1, "rotation": 0, "flipX": false, "flipY": false },
+      "zIndex": 10,
+      "visible": true,
+      "playback": { "startDelay": 0, "timeOffset": 0, "speed": 1, "autoPlay": true }
+    },
+    {
+      "id": "demo-beast-center",
+      "name": "Demo Beast Center",
+      "bundleId": "demo-beast",
+      "clip": "walk_down",
+      "transform": { "x": 640, "y": 575, "scaleX": 0.72, "scaleY": 0.72, "rotation": 0, "flipX": false, "flipY": false },
+      "zIndex": 5,
+      "visible": true,
+      "playback": { "startDelay": 350, "timeOffset": 100, "speed": 1.25, "autoPlay": true }
+    },
+    {
+      "id": "demo-beast-right",
+      "name": "Demo Beast Right",
+      "bundleId": "demo-beast",
+      "clip": "walk_left",
+      "transform": { "x": 950, "y": 610, "scaleX": 1, "scaleY": 1, "rotation": 0, "flipX": false, "flipY": false },
+      "zIndex": 10,
+      "visible": true,
+      "playback": { "startDelay": 700, "timeOffset": 0, "speed": 0.9, "autoPlay": true }
+    }
+  ]
+}
