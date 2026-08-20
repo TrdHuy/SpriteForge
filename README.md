@@ -1,139 +1,74 @@
 # SpriteForge
 
-SpriteForge is a browser-based 2D sprite animation studio designed to be both an authoring tool and a reusable animation-runtime baseline for future games.
+SpriteForge is a browser-based 2D sprite animation studio and scene composition previewer.
 
-## V1 features
+## Animation Bundle
 
-- Load PNG/WebP/JPEG sprite sheets locally in the browser.
-- Configure rows, columns, margin, spacing, and transparency/chroma key.
-- Grid overlay with selected row and current-frame highlighting.
-- Multiple named animation clips per sprite sheet.
-- Arbitrary frame sequences, FPS, per-frame durations, speed, loop/once/ping-pong, loop count, and random start.
-- Play, pause, stop, step, seek, and timeline reordering.
-- Anchor, global offset, per-frame offset, scale, flip X/Y, ground line, and frame-bound debug overlays.
-- Frame events with optional JSON payloads.
-- Body, hurt, and hit collision boxes authored directly on the preview canvas.
-- Versioned runtime metadata export/import.
-- Editor project export/import and local editor preferences.
-- Core playback unit tests.
-- Static deployment through GitHub Pages.
+SpriteForge calls one sprite image plus one runtime metadata file an **Animation Bundle**:
+
+```text
+monster.png
+monster.animation.json
+```
+
+The PNG contains the sprite sheet. The JSON describes grid geometry, animation clips, timing, transforms, collision boxes, and frame events.
+
+## Animation Editor
+
+The existing Animation Editor supports sprite-sheet loading, grid overlays, multiple clips, arbitrary frame sequences, FPS/per-frame duration, loop modes, anchor/offset stabilization, flip/scale, frame events, collision boxes, metadata import/export, and project persistence.
+
+## Scene Preview
+
+Use the top mode switcher and choose **Scene Preview**. It supports:
+
+- Loading multiple PNG + `.animation.json` pairs in one selection.
+- Automatic bundle pairing through `spriteSheet.image`.
+- Multiple scene instances from one Animation Bundle.
+- Per-instance clip, position, scale, rotation, flip, visibility, and z-index.
+- Shared scene playback clock with Play All, Pause, Stop, Restart, and global speed.
+- Per-instance start delay, time offset, speed, and auto-play.
+- Dragging instances on the scene canvas.
+- Ground, anchor, frame-bound, collision, and instance-name overlays.
+- Scene timing overview and animation event log.
+- Versioned `.scene.json` import/export.
+
+Scene files reference bundles instead of embedding image bytes.
+
+## Architecture
+
+```text
+src/
+├── core/
+│   ├── AnimationPlayer.ts
+│   ├── SpriteSheet.ts
+│   ├── bundle/AnimationBundle.ts
+│   └── scene/
+│       ├── Scene.ts
+│       ├── ScenePlayer.ts
+│       └── SceneTypes.ts
+├── editor/
+│   ├── Renderer.ts
+│   └── scene/
+│       ├── SceneController.ts
+│       └── SceneRenderer.ts
+├── io/
+│   ├── metadata.ts
+│   ├── BundleLoader.ts
+│   └── sceneMetadata.ts
+├── app-shell.ts
+├── main.ts
+└── scene-main.ts
+```
+
+`AnimationPlayer` still owns exactly one clip. `ScenePlayer` only orchestrates multiple independent players on a shared clock. Scene transforms never mutate Animation Bundle metadata.
 
 ## Development
 
 ```bash
 npm install
 npm run dev
-```
-
-Run tests and production build:
-
-```bash
 npm test
 npm run build
 ```
 
-## Architecture
-
-The animation runtime is deliberately separated from editor code:
-
-```text
-src/
-├── core/
-│   ├── AnimationClip.ts
-│   ├── AnimationPlayer.ts
-│   ├── SpriteSheet.ts
-│   └── types.ts
-├── editor/
-│   └── Renderer.ts
-├── io/
-│   └── metadata.ts
-└── main.ts
-```
-
-`src/core` has no dependency on editor UI. A future game runtime can reuse `SpriteSheet`, `AnimationPlayer`, and the metadata types without shipping the SpriteForge editor.
-
-## Sprite-sheet geometry
-
-For a sheet with dimensions `imageWidth × imageHeight`:
-
-```text
-frameWidth  = (imageWidth  - 2*marginX - spacingX*(columns-1)) / columns
-frameHeight = (imageHeight - 2*marginY - spacingY*(rows-1)) / rows
-```
-
-Animation clips reference a source `row` and a frame sequence containing column indexes.
-
-## Runtime metadata
-
-Runtime export uses a versioned `.animation.json` file. Example:
-
-```json
-{
-  "version": 1,
-  "spriteSheet": {
-    "image": "monster.png",
-    "rows": 4,
-    "columns": 8,
-    "margin": { "x": 0, "y": 0 },
-    "spacing": { "x": 0, "y": 0 },
-    "transparency": {
-      "mode": "nativeAlpha",
-      "color": "#000000",
-      "tolerance": 10
-    }
-  },
-  "animations": {
-    "walk_down": {
-      "row": 0,
-      "frames": [0, 1, 2, 3, 4, 5, 6, 7],
-      "fps": 8,
-      "frameDurations": {},
-      "playback": {
-        "speed": 1,
-        "loopMode": "loop",
-        "loopCount": -1,
-        "randomStart": false
-      },
-      "transform": {
-        "anchor": { "x": 0.5, "y": 1 },
-        "offset": { "x": 0, "y": 0 },
-        "scale": { "x": 1, "y": 1 },
-        "flipX": false,
-        "flipY": false
-      },
-      "frameOffsets": {},
-      "events": [],
-      "collision": { "frames": {} }
-    }
-  }
-}
-```
-
-Editor-only state such as preview zoom and debug toggles is not included in runtime metadata; it is stored in `.sprite-project.json` instead.
-
-## Coordinate model
-
-- Frame coordinates use the unscaled sprite-frame coordinate system.
-- Anchor is normalized relative to frame width/height; `(0.5, 1.0)` means bottom-center.
-- Clip offset and per-frame offset are expressed in frame pixels.
-- Collision boxes are authored in frame coordinates, so they remain independent of editor zoom.
-
-## Runtime usage
-
-```ts
-import { AnimationPlayer } from './core/AnimationPlayer';
-
-const clip = metadata.animations.walk_down;
-const player = new AnimationPlayer(clip);
-
-player.onEvent((event) => {
-  if (event.name === 'footstep') {
-    // Game decides how to react.
-  }
-});
-
-player.play(true);
-player.update(deltaMs);
-```
-
-SpriteForge emits animation events and metadata; game-specific combat, audio, physics, and networking remain outside the editor/runtime core.
+GitHub Pages is built from the Vite `dist` directory through GitHub Actions.
