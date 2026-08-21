@@ -1,4 +1,5 @@
 import './shell.css';
+import './animation-canvas.css';
 
 const params = new URLSearchParams(window.location.search);
 const mode = params.get('mode') === 'animation' ? 'animation' : 'scene';
