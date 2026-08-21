@@ -17,5 +17,6 @@ if (mode === 'scene') {
     .catch((error) => console.error('Failed to load the default SpriteForge sample.', error));
 } else {
   void import('./main')
-    .then(() => import('./animation-canvas.css'));
+    .then(() => Promise.all([import('./animation-canvas.css'), import('./sheet-click-preview')]))
+    .catch((error) => console.error('Failed to load Animation Editor enhancements.', error));
 }
