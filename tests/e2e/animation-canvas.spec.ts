@@ -62,3 +62,31 @@ test('Animation Editor canvases preserve aspect ratio while viewport size change
   expect(hasPreviewPixels).toBe(true);
   expect(runtimeErrors).toEqual([]);
 });
+
+test('one Animation clip can play global frames across a 2x4 sprite sheet', async ({ page }) => {
+  const runtimeErrors: string[] = [];
+  page.on('pageerror', (error) => runtimeErrors.push(error.message));
+  page.on('console', (message) => { if (message.type() === 'error') runtimeErrors.push(message.text()); });
+
+  await page.goto('./?mode=animation');
+  await page.locator('#imageInput').setInputFiles('public/samples/demo-beast/demo-beast.png');
+  await page.locator('#metadataInput').setInputFiles('public/samples/demo-beast/demo-multi-row.animation.json');
+
+  await expect(page.locator('#rows')).toHaveValue('2');
+  await expect(page.locator('#columns')).toHaveValue('4');
+  await expect(page.locator('#clipList .clip-item')).toHaveCount(1);
+  await expect(page.locator('#frameSequence')).toHaveValue('0,1,2,3,4,5,6,7');
+  await expect(page.locator('#clipRow')).toHaveCount(0);
+  await expect(page.locator('#timeline .timeline-frame')).toHaveCount(8);
+
+  await page.locator('#timeline .timeline-frame').nth(3).locator('.frame-main').click();
+  await expect(page.locator('#frameReadout')).toContainText('Frame 3');
+  await page.locator('#nextFrame').click();
+  await expect(page.locator('#frameReadout')).toContainText('Frame 4');
+
+  await page.locator('#playPause').click();
+  await expect(page.locator('#playPause')).toContainText('Pause');
+  await page.waitForTimeout(300);
+  await expect(page.locator('#previewCanvas')).toBeVisible();
+  expect(runtimeErrors).toEqual([]);
+});
