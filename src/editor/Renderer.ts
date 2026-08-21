@@ -4,7 +4,7 @@ import type { AnimationClipData, CollisionBox, CollisionKind, FrameRect, Vec2 } 
 export interface DebugFlags { showGrid: boolean; showAnchor: boolean; showGround: boolean; showFrameBounds: boolean; showCollision: boolean; }
 export interface PreviewLayout { anchorScreen: Vec2; zoom: number; frameWidth: number; frameHeight: number; scaleX: number; scaleY: number; flipX: boolean; flipY: boolean; anchor: Vec2; }
 
-export function renderSheetView(canvas: HTMLCanvasElement, image: HTMLImageElement | null, spriteSheet: SpriteSheet | null, selectedRow: number, currentFrame: number, showGrid: boolean): void {
+export function renderSheetView(canvas: HTMLCanvasElement, image: HTMLImageElement | null, spriteSheet: SpriteSheet | null, currentFrame: number, showGrid: boolean): void {
   const ctx = canvas.getContext('2d'); if (!ctx) return;
   const { width, height } = canvas;
   ctx.clearRect(0,0,width,height); drawChecker(ctx,width,height,16);
@@ -14,9 +14,10 @@ export function renderSheetView(canvas: HTMLCanvasElement, image: HTMLImageEleme
   ctx.save(); ctx.translate(ox,oy); ctx.scale(scale,scale);
   for (let row=0; row<spriteSheet.config.rows; row++) for (let col=0; col<spriteSheet.config.columns; col++) {
     let rect: FrameRect; try { rect=spriteSheet.getFrameRect(row,col); } catch { continue; }
-    if (row===selectedRow) { ctx.fillStyle=col===currentFrame?'rgba(255,184,77,.26)':'rgba(93,196,255,.12)'; ctx.fillRect(rect.x,rect.y,rect.width,rect.height); }
-    ctx.strokeStyle=col===currentFrame&&row===selectedRow?'#ffb84d':'rgba(211,226,240,.8)'; ctx.lineWidth=(col===currentFrame&&row===selectedRow?2.2:1)/scale; ctx.strokeRect(rect.x,rect.y,rect.width,rect.height);
-    ctx.fillStyle='rgba(8,13,22,.78)'; ctx.fillRect(rect.x+3/scale,rect.y+3/scale,24/scale,18/scale); ctx.fillStyle='#f6fbff'; ctx.font=`${11/scale}px ui-monospace,monospace`; ctx.fillText(`${col}`,rect.x+7/scale,rect.y+16/scale);
+    const frame=row*spriteSheet.config.columns+col, selected=frame===currentFrame;
+    ctx.fillStyle=selected?'rgba(255,184,77,.26)':'rgba(93,196,255,.08)'; ctx.fillRect(rect.x,rect.y,rect.width,rect.height);
+    ctx.strokeStyle=selected?'#ffb84d':'rgba(211,226,240,.8)'; ctx.lineWidth=(selected?2.2:1)/scale; ctx.strokeRect(rect.x,rect.y,rect.width,rect.height);
+    ctx.fillStyle='rgba(8,13,22,.78)'; ctx.fillRect(rect.x+3/scale,rect.y+3/scale,30/scale,18/scale); ctx.fillStyle='#f6fbff'; ctx.font=`${11/scale}px ui-monospace,monospace`; ctx.fillText(`${frame}`,rect.x+7/scale,rect.y+16/scale);
   }
   ctx.restore();
 }
