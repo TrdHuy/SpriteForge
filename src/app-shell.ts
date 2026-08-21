@@ -1,5 +1,4 @@
 import './shell.css';
-import './animation-canvas.css';
 
 const params = new URLSearchParams(window.location.search);
 const mode = params.get('mode') === 'animation' ? 'animation' : 'scene';
@@ -17,5 +16,6 @@ if (mode === 'scene') {
     .then(({ loadDefaultSampleThroughUi }) => loadDefaultSampleThroughUi())
     .catch((error) => console.error('Failed to load the default SpriteForge sample.', error));
 } else {
-  void import('./main');
+  void import('./main')
+    .then(() => import('./animation-canvas.css'));
 }
