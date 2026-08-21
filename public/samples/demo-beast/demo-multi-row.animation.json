@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "spriteSheet": {
+    "image": "demo-beast.png",
+    "rows": 2,
+    "columns": 4,
+    "frameWidth": 64,
+    "frameHeight": 64,
+    "margin": { "x": 0, "y": 0 },
+    "spacing": { "x": 0, "y": 0 },
+    "transparency": {
+      "mode": "nativeAlpha",
+      "color": "#000000",
+      "tolerance": 0
+    }
+  },
+  "animations": {
+    "attack": {
+      "frames": [0,1,2,3,4,5,6,7],
+      "fps": 8,
+      "frameDurations": {},
+      "playback": { "speed": 1, "loopMode": "loop", "loopCount": -1, "randomStart": false },
+      "transform": { "anchor": { "x": 0.5, "y": 0.9 }, "offset": { "x": 0, "y": 0 }, "scale": { "x": 2, "y": 2 }, "flipX": false, "flipY": false },
+      "frameOffsets": {},
+      "events": [{ "frame": 4, "name": "row_boundary" }],
+      "collision": { "frames": {} }
+    }
+  }
+}
