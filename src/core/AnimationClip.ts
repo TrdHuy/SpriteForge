@@ -1,9 +1,8 @@
 import type { AnimationClipData } from './types';
 
-export function createDefaultClip(row = 0, columns = 1): AnimationClipData {
+export function createDefaultClip(frameCount = 1): AnimationClipData {
   return {
-    row,
-    frames: Array.from({ length: Math.max(1, columns) }, (_, i) => i),
+    frames: Array.from({ length: Math.max(1, frameCount) }, (_, i) => i),
     fps: 8,
     frameDurations: {},
     playback: {

@@ -27,6 +27,8 @@ export class SpriteSheet {
     ) / this.config.rows;
   }
 
+  get frameCount(): number { return this.config.rows * this.config.columns; }
+
   validate(): string[] {
     const errors: string[] = [];
     const { rows, columns, margin, spacing } = this.config;
@@ -49,5 +51,10 @@ export class SpriteSheet {
       width,
       height
     };
+  }
+
+  getFrameRectByIndex(frameIndex: number): FrameRect {
+    if (!Number.isInteger(frameIndex) || frameIndex < 0 || frameIndex >= this.frameCount) throw new RangeError(`Frame ${frameIndex} is outside the sheet.`);
+    return this.getFrameRect(Math.floor(frameIndex / this.config.columns), frameIndex % this.config.columns);
   }
 }
