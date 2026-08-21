@@ -32,3 +32,29 @@ test('default sample loads and plays in Scene Preview', async ({ page }) => {
   expect(hasRenderedPixels).toBe(true);
   expect(runtimeErrors).toEqual([]);
 });
+
+test('Scene Preview canvas keeps its aspect ratio when the browser viewport changes', async ({ page }) => {
+  await page.goto('./');
+  await expect(page.locator('#bundleCount')).toHaveText('1');
+
+  const canvas = page.locator('#sceneCanvas');
+  const expectedRatio = 1100 / 620;
+  const viewports = [
+    { width: 1600, height: 1000 },
+    { width: 1280, height: 800 },
+    { width: 1000, height: 760 },
+    { width: 720, height: 900 }
+  ];
+
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    await page.waitForTimeout(50);
+    const box = await canvas.boundingBox();
+    expect(box).not.toBeNull();
+    const ratio = box!.width / box!.height;
+    expect(Math.abs(ratio - expectedRatio)).toBeLessThan(0.01);
+  }
+
+  await expect(page.locator('#sceneHierarchy .hierarchy-item')).toHaveCount(3);
+  await expect(page.locator('#playScene')).toContainText('Pause');
+});
