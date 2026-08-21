@@ -60,8 +60,8 @@ export interface CollisionData {
   frames: Record<string, FrameCollisionData>;
 }
 
+/** V2 clips use row-major global source-frame indexes across the whole sprite sheet. */
 export interface AnimationClipData {
-  row: number;
   frames: number[];
   fps: number;
   frameDurations: Record<string, number>;
@@ -72,15 +72,19 @@ export interface AnimationClipData {
   collision: CollisionData;
 }
 
-export interface AnimationMetadataV1 {
-  version: 1;
+export interface AnimationMetadataV2 {
+  version: 2;
   spriteSheet: SpriteSheetConfig;
   animations: Record<string, AnimationClipData>;
 }
 
+export type AnimationMetadata = AnimationMetadataV2;
+/** Compatibility alias for existing internal imports; serialized metadata is V2. */
+export type AnimationMetadataV1 = AnimationMetadataV2;
+
 export interface SpriteProjectV1 {
   projectVersion: 1;
-  metadata: AnimationMetadataV1;
+  metadata: AnimationMetadataV2;
   editor: {
     selectedClip: string | null;
     previewZoom: number;
