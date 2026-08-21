@@ -1,0 +1,11 @@
+.canvas-shell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.canvas-shell canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}

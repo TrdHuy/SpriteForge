@@ -16,5 +16,6 @@ if (mode === 'scene') {
     .then(({ loadDefaultSampleThroughUi }) => loadDefaultSampleThroughUi())
     .catch((error) => console.error('Failed to load the default SpriteForge sample.', error));
 } else {
-  void import('./main');
+  void import('./main')
+    .then(() => import('./animation-canvas.css'));
 }
