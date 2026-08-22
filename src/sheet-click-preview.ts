@@ -64,3 +64,5 @@ function frameAtPointer(event: MouseEvent): number | null {
   }
   return null;
 }
+
+export {};
